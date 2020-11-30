@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#pour lancer le server Django => python manage.py runserver
 """Django's command-line utility for administrative tasks."""
 import os
 import sys

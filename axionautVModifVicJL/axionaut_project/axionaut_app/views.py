@@ -8,9 +8,20 @@ from .models import Ironcar
 car = Ironcar()
 
 def commandes(request):
+    car.mode="training"
+    
     return render(request, 'axionaut_app/commandes.html', {})
 
 def auto(request):
+    #switching mode 
+    car.mode="auto"
+    #loading model
+    if car.model_loaded:
+        car.mode_function = car.autopilot
+    else:
+        if car.verbose:
+            #socketio.emit('msg2user', {'type': 'warning','msg': 'Model not loaded'}, namespace='/car')
+            print("model not loaded")
     return render(request, 'axionaut_app/auto.html', {})
 
 def menu(request):
@@ -39,3 +50,19 @@ def update_down(request):
     print('direction : ')
     print(car.direction)    
     return render(request, 'axionaut_app/commandes.html', {})
+
+def start_stop(request):
+
+    if car.started==True :
+        started=False
+    else:
+        started=False
+
+    car.started=started
+    
+    # Stop the gas before switching mode and reset wheel angle (safe)
+    car.gas(car.commands['neutral']) #pwm setup
+    car.dir(car.commands['straight']) #pwm setup
+
+    return render(request, 'axionaut_app/commandes.html', {})
+

@@ -34,7 +34,7 @@
 <body>
     <header>
         <div id="Textebienv">
-            <h1 class="bienve"> Training mode</h1>
+            <h1 class="bienve"> Auto mode</h1>
         </div>
         <button type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
 
@@ -44,8 +44,7 @@
         <div class="form-group col-md-12">
             <label>Démarrage</label><br />
             <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button type="submit" class="btn btn-outline-primary" data-mode="down">start</button>
-                <button type="submit" class="btn btn-outline-primary" data-mode="right">stop</button>
+                <button type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
             </div>
         </div>
     </div>
@@ -55,22 +54,35 @@
 
     <div id="directions">
         <div class="form-group col-md-12">
-            <label>Pilotage</label><br />
-            <button id='up' type="submit" class="btn btn-outline-primary" data-mode="up"
-                    onclick="location.href='{% url 'axionaut_app:update_up' %}'">⬆</button>
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                
-                <button id='left' type="submit" class="btn btn-outline-primary" data-mode="left"
-                    onclick="location.href='{% url 'axionaut_app:update_left' %}'">⬅</button>
-                <button id='down' type="submit" class="btn btn-outline-primary" data-mode="down"
-                    onclick="location.href='{% url 'axionaut_app:update_down' %}'">⬇</button>
-                <button id='right' type="submit" class="btn btn-outline-primary" data-mode="right"
-                    onclick="location.href='{% url 'axionaut_app:update_right' %}'">➡</button>
-            </div>
+            <label><strong class="modelunderline">Modèles</strong></label><br />
+                <form method="post" action="traitement.php">
+                     <p>
+                        <label for="model">Choisissez un modèle</label><br />
+                        <select name="models" id="mod">
+                            <option value="empty">Aucun</option>
+                            <option value="m1">Model 1</option>
+                            <option value="m2">Model 2</option>
+                            <option value="m3">Model 3</option>
+                            <option value="m4">Model 4</option>
+                        </select>
+                        <input type="submit" value="Valider" />
+                    </p>
+                </form>
         </div>
 
         <br />
     </div>
+
+    <div class="form-group" id="model-group">
+          <label>Model </label>
+          <br />
+          <select class="form-control" id="model_select">
+              <option selected>Choose model...</option>
+              {% for model in models %}
+              <option value='{{model}}'>{{model}}</option>
+              {% endfor %}
+          </select>
+        </div>
 
     <!-- Stream/Picture -->
     <div class="col-lg-6 text-center mb-3">

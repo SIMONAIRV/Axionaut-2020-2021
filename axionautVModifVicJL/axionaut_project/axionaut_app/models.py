@@ -335,3 +335,70 @@ class Ironcar():
             new_value = int(
                 self.curr_gas * (self.commands['drive_max']-self.commands['drive']) + self.commands['drive'])
         self.gas(new_value)
+
+    def dirauto(self, img, prediction):
+        """Sets the pwm values for dir according to the prediction from the
+        Neural Network (NN).
+        """
+
+        index_class = prediction.index(max(prediction))
+        local_dir = -1 + 2 * float(index_class) / float(len(prediction) - 1)
+
+        if self.started:
+            dir_value = int(local_dir * (self.commands['right'] - self.commands['left']) / 2. + self.commands['straight'])
+        else:
+            dir_value = self.commands['straight']
+        self.dir(dir_value)
+
+    def on_start(self):
+        """Switches started mode between True and False."""
+
+        self.started = not self.started
+        if self.verbose:
+            print('starter set to {}'.format(self.started))
+        return self.started
+
+    def on_dir(self, data):
+        """Triggered when a value from the keyboard/gamepad is received for dir.
+
+        data: intensity of the key pressed.
+        """
+
+        if not self.started:
+            return
+
+        if self.mode not in ['training']:  # Ignore dir commands if not in training mode
+            if self.verbose:
+                print('Ignoring dir command')
+            return
+
+        self.curr_dir = self.commands['invert_dir'] * float(data)
+        if self.curr_dir == 0:
+            new_value = self.commands['straight']
+        else:
+            new_value = int(
+                self.curr_dir * (self.commands['right'] - self.commands['left'])/2. + self.commands['straight'])
+        self.dir(new_value)
+
+    def max_speed_update(self, new_max_speed):
+        """Changes the max_speed of the car."""
+
+        self.max_speed_rate = new_max_speed
+        if self.verbose:
+            print('The new max_speed is : ', self.max_speed_rate)
+        return self.max_speed_rate
+
+    def switch_streaming(self):
+        """Switches the streaming state."""
+
+        self.streaming_state = not self.streaming_state
+        if self.verbose:
+            print('Streaming state set to {}'.format(self.streaming_state))
+
+
+    def switch_speed_mode(self, speed_mode):
+        """Changes the speed mode of the car"""
+
+        self.speed_mode = speed_mode
+        msg = 'Speed mode set to {}'.format(speed_mode)
+        #socketio.emit('msg2user', {'type': 'success','msg': msg}, namespace='/car')

@@ -1,7 +1,7 @@
 {
     "datasets_path": "datasets",
     "fps": 45,
-    "stream_path": "./stream/",
+    "stream_path": "/Users/J-Luc/Desktop/Axionaut-2020-2021/axionautVModifVicJL/axionaut_project/stream",
     "commands": {
         "invert_dir": -1,
         "right": 422,

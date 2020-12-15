@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^auto/$', views.auto, name='auto'),
     url(r'^admin/', admin.site.urls),
     url(r'^axionaut_app/', include(('axionaut_app.urls','axionaut_app'), namespace='axionaut_app')),
-    url(r'^switch_mode/$', views.switch_mode, name='switch_mode'),
+    url(r'^start_stop/$', views.start_stop, name='start_stop'),
 
 ]
 

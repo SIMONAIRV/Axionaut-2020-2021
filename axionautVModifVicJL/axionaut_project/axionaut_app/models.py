@@ -10,7 +10,7 @@ get_default_graph = None  # For lazy imports
 
 
 
-CONFIG = '/Users/J-Luc/Desktop/Axionaut-2020-2021/axionautVModifVicJL/axionaut_project/config.json'
+CONFIG = './config.json'
 
 # Create your models here.
 

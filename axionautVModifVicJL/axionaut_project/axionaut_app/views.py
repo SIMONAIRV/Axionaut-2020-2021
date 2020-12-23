@@ -10,7 +10,7 @@ import os
 
 car = Ironcar()
 
-CONFIG = '/Users/J-Luc/Desktop/Axionaut-2020-2021/axionautVModifVicJL/axionaut_project/config.json'
+CONFIG = './config.json'
 with open(CONFIG) as json_file:
     config = json.load(json_file)
     MODELS_PATH = config['models_path']

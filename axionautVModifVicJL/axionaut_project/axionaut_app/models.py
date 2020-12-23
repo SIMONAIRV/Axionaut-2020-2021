@@ -402,3 +402,53 @@ class Ironcar():
         self.speed_mode = speed_mode
         msg = 'Speed mode set to {}'.format(speed_mode)
         #socketio.emit('msg2user', {'type': 'success','msg': msg}, namespace='/car')
+        """
+    def select_model(self, model_name):
+        "/"Changes the model of autopilot selected and loads it."/"
+
+        data = {'type': 'info', 'msg': 'Loading model {}...'.format(model_name)}
+        #socketio.emit('msg2user', data, namespace='/car')
+
+        if model_name == self.current_model:
+            data = {'type': 'info', 'msg': 'Model {} already loaded.'.format(self.current_model)}
+            socketio.emit('model_loaded', data, namespace='/car')
+            return
+
+        try:
+            # Only import tensorflow if needed (it's heavy)
+            global get_default_graph
+            if get_default_graph is None:
+                try:
+                    from tensorflow import get_default_graph
+                    from keras.models import load_model
+                except Exception as e:
+                    msg = 'Error while importing ML librairies. Got error {}'.format(e)
+                    data = {'type': 'danger', 'msg': msg}
+                    socketio.emit('msg2user', data, namespace='/car')
+
+                    if self.verbose:
+                        print('ML error : ', e)
+                    return
+
+            if self.verbose:
+                print('Selected model: ', model_name)
+
+            self.model = load_model(model_name)
+            self.graph = get_default_graph()
+            self.current_model = model_name
+
+            self.model_loaded = True
+            self.switch_mode(self.mode)
+
+            data = {'type': 'success', 'msg': 'The model {} has been successfully loaded'.format(self.current_model)}
+            socketio.emit('model_loaded', data, namespace='/car')
+
+            if self.verbose:
+                print('The model {} has been successfully loaded'.format(self.current_model))
+
+        except Exception as e:
+            data = {'type': 'danger', 'msg': 'Error while loading model {}. Got error {}'.format(model_name, e)}
+            socketio.emit('msg2user', data, namespace='/car')
+
+            if self.verbose:
+                print('An Exception occured : ', e)"""

@@ -5,7 +5,15 @@ from django.http import HttpResponse
 
 from .models import Ironcar
 
+import json
+import os
+
 car = Ironcar()
+
+CONFIG = '/Users/J-Luc/Desktop/Axionaut-2020-2021/axionautVModifVicJL/axionaut_project/config.json'
+with open(CONFIG) as json_file:
+    config = json.load(json_file)
+    MODELS_PATH = config['models_path']
 
 def commandes(request):
     car.mode="training"
@@ -14,15 +22,28 @@ def commandes(request):
 
 def auto(request):
     #switching mode 
+    
     car.mode="auto"
     #loading model
+    """
     if car.model_loaded:
         car.mode_function = car.autopilot
     else:
         if car.verbose:
             #socketio.emit('msg2user', {'type': 'warning','msg': 'Model not loaded'}, namespace='/car')
-            print("model not loaded")
-    return render(request, 'axionaut_app/auto.html', {})
+            print("model not loaded")"""
+
+    models = []
+    print(os.path.isdir(MODELS_PATH))
+    if os.path.isdir(MODELS_PATH):
+        #models = [os.path.join(MODELS_PATH, f) for f in os.listdir(MODELS_PATH) if f.endswith('.hdf5')]
+        models = [os.path.join(MODELS_PATH, f) for f in os.listdir(MODELS_PATH)]
+        
+    print('SERVER : models : ', models)
+    context ={
+        'models' : models
+    }
+    return render(request, 'axionaut_app/auto.html', context)
 
 def menu(request):
     return render(request, 'axionaut_app/menu.html', {})

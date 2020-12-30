@@ -10,7 +10,7 @@ import os
 
 car = Ironcar()
 
-CONFIG = '/Users/J-Luc/Desktop/Axionaut-2020-2021/axionautVModifVicJL/axionaut_project/config.json'
+CONFIG = './config.json'
 with open(CONFIG) as json_file:
     config = json.load(json_file)
     MODELS_PATH = config['models_path']
@@ -48,29 +48,42 @@ def auto(request):
 def menu(request):
     return render(request, 'axionaut_app/menu.html', {})
 
-def update_up(request):
+def dir_neutral(request):
     car.direction=3
     print('direction : ')
     print(car.direction)
+    car.on_dir(0)
     return render(request, 'axionaut_app/commandes.html', {})
 
-def update_left(request):
+def dir_left(request):
     car.direction=2
     print('direction : ')
     print(car.direction)
+    car.on_dir(-1)
     return render(request, 'axionaut_app/commandes.html', {})
 
-def update_right(request):
+def dir_right(request):
     car.direction=4
     print('direction : ')
-    print(car.direction)    
+    print(car.direction) 
+    car.on_dir(1)   
     return render(request, 'axionaut_app/commandes.html', {})
 
-def update_down(request):
-    car.direction=0
-    print('direction : ')
-    print(car.direction)    
+def gas_neutral(request):
+    print('gas : 0')
+    car.on_gas(0)
     return render(request, 'axionaut_app/commandes.html', {})
+
+def gas_forward(request):
+    print('gas : 1')
+    car.on_gas(1)
+    return render(request, 'axionaut_app/commandes.html', {})
+
+def gas_backward(request):
+    print('gas : -1')
+    car.on_gas(-1)
+    return render(request, 'axionaut_app/commandes.html', {})
+
 
 def start_stop(request):
 

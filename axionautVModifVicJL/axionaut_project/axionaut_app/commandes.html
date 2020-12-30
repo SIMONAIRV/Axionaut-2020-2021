@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Accueil</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'axionaut_app/css/style.css' %}" />
+
+    <script language="javascript"> //script touches
+        document.addEventListener("keyup", event => {
+            if ((event.isComposing || event.keyCode === 37) && !event.repeat ) //left
+            {
+                document.getElementById('dir_neutral').click()
+            }
+            if ((event.isComposing || event.keyCode === 39) && !event.repeat) //right
+            {
+                document.getElementById('dir_neutral').click()
+            }
+            if ((event.isComposing || event.keyCode === 38) && !event.repeat)  //up
+            {
+                document.getElementById('gas_neutral').click()
+            }
+            if ((event.isComposing || event.keyCode === 40) && !event.repeat) //down
+            {
+                document.getElementById('gas_neutral').click()
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if ((event.isComposing || event.keyCode === 37) && !event.repeat ) //left
+            {
+                document.getElementById('left').click()
+            }
+            if ((event.isComposing || event.keyCode === 39) && !event.repeat) //right
+            {
+                document.getElementById('right').click()
+            }
+            if ((event.isComposing || event.keyCode === 38) && !event.repeat)  //up
+            {
+                document.getElementById('up').click()
+            }
+            if ((event.isComposing || event.keyCode === 40) && !event.repeat) //down
+            {
+                document.getElementById('down').click()
+            }
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div id="Textebienv">
+            <h1 class="bienve"> Training mode</h1>
+        </div>
+        <button type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
+
+    </header>
+    <br>
+    <div id="start_stop">
+        <div class="form-group col-md-12">
+            <label>Démarrage</label><br />
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+
+    <!-- Arrows on keyboard -->
+    <div id="directions">
+        <div class="form-group col-md-12">
+            <label>Pilotage</label><br />
+            <button id='up' type="submit" class="btn btn-outline-primary" data-mode="up"
+                    onclick="location.href='{% url 'axionaut_app:gas_forward' %}'">⬆</button>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                
+                <button id='left' type="submit" class="btn btn-outline-primary" data-mode="left"
+                    onclick="location.href='{% url 'axionaut_app:dir_left' %}'">⬅</button>
+                <button id='gas_neutral' type="submit" class="btn btn-outline-primary" data-mode="down"
+                    onclick="location.href='{% url 'axionaut_app:gas_neutral' %}'"></button>
+                <button id='dir_neutral' type="submit" class="btn btn-outline-primary" data-mode="down"
+                    onclick="location.href='{% url 'axionaut_app:dir_neutral' %}'"></button>
+                <button id='right' type="submit" class="btn btn-outline-primary" data-mode="right"
+                    onclick="location.href='{% url 'axionaut_app:dir_right' %}'">➡</button>
+            </div>
+            <div>
+                <button id='down' type="submit" class="btn btn-outline-primary" data-mode="down"
+                onclick="location.href='{% url 'axionaut_app:gas_backward' %}'">⬇</button>
+            </div>
+        </div>
+
+        <br />
+    </div>
+
+    <!-- Stream/Picture -->
+    <div class="col-lg-6 text-center mb-3">
+
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="stream"
+            viewBox="0 0 250 150" width="300" height="200" ALIGN-type=LEFT>
+            <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"
+                    markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L3,3 z" fill="#f00" />
+                </marker>
+            </defs>
+
+            <image id="stream_image" xlink:href="/picture" x="0" y="0" height="150px" width="250px" />
+            <line id="dirline" x1="125" y1="110" x2="25" y2="110" stroke="#f00" stroke-width="5"
+                marker-end="url(#arrow)" visibility="hidden" />
+        </svg>
+
+        <div class="btn-group mt-1" role="group" aria-label="Basic example">
+            <button id="camera" class="btn btn-info">Start camera</button>
+            <button id="take-picture" type="button" class="btn btn-light">📸</button>
+        </div>
+    </div>
+</body>
+
+</html>

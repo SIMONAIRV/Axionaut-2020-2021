@@ -1,0 +1,35 @@
+{% extends 'axionaut_app/commandes.html' %}
+
+{% block content %}
+<p> Le mode de contrôle actuel est sur : <mark> {{car_mode}} </mark> </p>
+<br/>
+<div id="tableau">
+	<p> Les valeurs des variables de la voiture sont: </p>
+	<table>
+   		<tr>
+       		<td>Up</td>
+       		<td>{{car_up}}</td>
+   		</tr>
+   		<tr>
+       		<td>Left</td>
+       		<td>{{car_left}}</td>
+   		</tr>
+   		<tr>
+       		<td>Right</td>
+       		<td>{{car_right}}</td>
+   		</tr>
+   		<tr>
+       		<td>Down</td>
+       		<td>{{car_down}}</td>
+   		</tr>
+   		<tr>
+       		<td>Up Left</td>
+       		<td>{{car_upLeft}}</td>
+   		</tr>
+   		<tr>
+       		<td>Up Right</td>
+       		<td>{{car_upRight}}</td>
+   		</tr>
+	</table>
+</div>
+{% endblock %}

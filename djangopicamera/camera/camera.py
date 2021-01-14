@@ -33,7 +33,7 @@ class Camera(object):
             camera.vflip = True
 
             # let camera warm up
-            camera.start_preview()
+            #camera.start_preview()
             time.sleep(2)
 
             stream = io.BytesIO()

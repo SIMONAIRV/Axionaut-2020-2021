@@ -54,8 +54,8 @@ class Ironcar():
 
         from threading import Thread
 
-        self.camera_thread = Thread(target=self.camera_loop, args=())
-        self.camera_thread.start()
+        #self.camera_thread = Thread(target=self.camera_loop, args=())
+        #self.camera_thread.start()
 
         self.load_config()
 
@@ -402,16 +402,18 @@ class Ironcar():
         self.speed_mode = speed_mode
         msg = 'Speed mode set to {}'.format(speed_mode)
         #socketio.emit('msg2user', {'type': 'success','msg': msg}, namespace='/car')
-        """
+    
+
     def select_model(self, model_name):
-        "/"Changes the model of autopilot selected and loads it."/"
+        """Changes the model of autopilot selected and loads it."""
 
         data = {'type': 'info', 'msg': 'Loading model {}...'.format(model_name)}
         #socketio.emit('msg2user', data, namespace='/car')
 
         if model_name == self.current_model:
             data = {'type': 'info', 'msg': 'Model {} already loaded.'.format(self.current_model)}
-            socketio.emit('model_loaded', data, namespace='/car')
+            #socketio.emit('model_loaded', data, namespace='/car')
+            print("msg 2 user 1")
             return
 
         try:
@@ -424,7 +426,8 @@ class Ironcar():
                 except Exception as e:
                     msg = 'Error while importing ML librairies. Got error {}'.format(e)
                     data = {'type': 'danger', 'msg': msg}
-                    socketio.emit('msg2user', data, namespace='/car')
+                    #socketio.emit('msg2user', data, namespace='/car')
+                    print("msg 2 user 2")
 
                     if self.verbose:
                         print('ML error : ', e)
@@ -448,7 +451,8 @@ class Ironcar():
 
         except Exception as e:
             data = {'type': 'danger', 'msg': 'Error while loading model {}. Got error {}'.format(model_name, e)}
-            socketio.emit('msg2user', data, namespace='/car')
+            #socketio.emit('msg2user', data, namespace='/car')
+            print("msg 2 user 3")
 
             if self.verbose:
-                print('An Exception occured : ', e)"""
+                print('An Exception occured : ', e)

@@ -440,7 +440,7 @@ class Ironcar():
                 print('Selected model: ', model_name)
 
             self.model = load_model(model_name)  # PROBLEME ICI
-#           self.current_model = model_name
+            self.current_model = model_name
             self.model_loaded = True
             self.switch_mode(self.mode)
 
@@ -459,3 +459,42 @@ class Ironcar():
 
             if self.verbose:
                 print('An Exception occured : ', e)
+
+
+    def switch_mode(self, new_mode):
+        """Switches the mode between:
+                - training
+                - resting
+                - dirauto
+                - auto
+        """
+
+        # always switch the starter to stopped when switching mode
+        self.started = False
+
+        # Stop the gas before switching mode and reset wheel angle (safe)
+        #self.gas(self.commands['neutral'])
+        #self.dir(self.commands['straight'])
+
+        
+        if new_mode == "auto":
+            self.mode = 'auto'
+            if self.model_loaded:
+                self.mode_function = self.autopilot
+            else:
+                if self.verbose:
+                    print("model not loaded")
+        elif new_mode == "training":
+            self.mode = 'training'
+            self.mode_function = self.training
+        else:
+            self.mode = 'resting'
+            self.mode_function = self.default_call
+
+        # Make sure we stopped and reset wheel angle even if the previous mode
+        # sent a last command before switching.
+        #self.gas(self.commands['neutral'])
+        #self.dir(self.commands['straight'])
+
+        if self.verbose:
+            print('switched to mode : ', new_mode)

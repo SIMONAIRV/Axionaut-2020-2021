@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Accueil</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'axionaut_app/css/style.css' %}" />
+
+    <script language="javascript"> //script touches
+        document.addEventListener("keyup", event => {
+            if (event.isComposing || event.key === " ") //space
+            {
+                document.getElementById('start_stop_button').click()
+            }
+            if (event.isComposing || event.code === "Escape") //space
+            {
+                document.getElementById('menu').click()
+            }
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div id="Textebienv">
+            <h1 class="bienve"> Auto mode</h1>
+        </div>
+        <button id="menu" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
+
+    </header>
+    <br>
+    <div id="start_stop">
+        <div class="form-group col-md-12">
+            <label>Démarrage</label><br />
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button id="start_stop_button" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop_auto' %}'">Start/Stop</button> 
+            </div>
+        </div>
+    </div>
+    <br />
+
+
+    <div id="dashboard-up">
+        <div id="directions">
+            <!-- Stream/Picture -->
+            <div id="streaming">
+                <h1>Streaming</h1>
+                <img src="{% url 'axionaut_app:video' %}">
+            </div>
+            <div id="commandes"> 
+                <div class="form-group-modeles col-md-12">
+                    <h1 class="dashboard-commandes">Modèles</h1>
+                        <div class="form-group" id="model-group">
+                            <label>Model </label>
+                            <br />
+          <!-- <select class="form-control" id="model_select">
+              <option selected>Choose model...</option>
+              {% for model in models %}
+              <option value='{{model}}'>{{model}}</option>
+              {% endfor %}
+          </select> -->
+                            <form method = "GET"> 
+                                {{ form }} 
+                                <input type = "submit" value = "Submit"> 
+                            </form> 
+                        </div>
+                </div>
+            </div>
+
+        <br />
+        </div>
+    </div>
+</body>
+
+</html>

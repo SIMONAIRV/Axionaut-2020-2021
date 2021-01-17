@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+
+    <title>Accueil</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'axionaut_app/css/style.css' %}" />
+
+    <script language="javascript"> //script touches
+        document.addEventListener("keyup", event => {
+            if ((event.isComposing || event.key === "ArrowLeft") && !event.repeat ) //left
+            {
+                document.getElementById('dir_neutral').click()
+            }
+            if ((event.isComposing || event.key === "ArrowRight") && !event.repeat) //right
+            {
+                document.getElementById('dir_neutral').click()
+            }
+            if ((event.isComposing ||event.key === "ArrowUp") && !event.repeat)  //up
+            {
+                document.getElementById('gas_neutral').click()
+            }
+            if ((event.isComposing || event.key === "ArrowDown") && !event.repeat) //down
+            {
+                document.getElementById('gas_neutral').click()
+            }
+            if (event.isComposing || event.code === "Escape") 
+            {
+                document.getElementById('menu').click()
+            }
+            if (event.isComposing || event.key === " ") //space
+            {
+                document.getElementById('start_stop_button').click()
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if ((event.isComposing || event.key === "ArrowLeft") && !event.repeat ) //left
+            {
+                document.getElementById('left').click()
+            }
+            if ((event.isComposing ||event.key === "ArrowRight") && !event.repeat) //right
+            {
+                document.getElementById('right').click()
+            }
+            if ((event.isComposing || event.key === "ArrowUp") && !event.repeat)  //up
+            {
+                document.getElementById('up').click()
+            }
+            if ((event.isComposing ||  event.key === "ArrowDown") && !event.repeat) //down
+            {
+                document.getElementById('down').click()
+            }
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="title">
+            <h1 class="bienve"> Training mode</h1>
+        </div>
+        <button id="menu" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
+
+    </header>
+    <br>
+    <div id="start_stop">
+        <div>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button id="start_stop_button" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
+            </div>
+        </div>
+    </div>
+    <br />
+    </div>
+
+
+
+    <!-- Arrows on keyboard -->
+    <div id="dashboard-up">
+        <div id="directions">
+            <!-- Stream/Picture -->
+            <div id="streaming">
+                <h1>Streaming</h1>
+                <img src="{% url 'axionaut_app:video' %}">
+            </div>
+            <div id="commandes"> 
+                <h1 class="dashboard-commandes">Commandes</h1>
+                <div class="form-group-commandes col-md-12">
+                     <label>Pilotage</label><br />
+                    <button id='up' type="submit" class="btn btn-outline-primary" data-mode="up"
+                    onclick="location.href='{% url 'axionaut_app:gas_forward' %}'">⬆</button>
+                     <div class="btn-group mr-2" role="group" aria-label="First group">
+                
+                        <button id='left' type="submit" class="btn btn-outline-primary" data-mode="left"
+                       onclick="location.href='{% url 'axionaut_app:dir_left' %}'">⬅</button>
+                        <button id='gas_neutral' type="submit" class="btn btn-outline-primary" data-mode="down"
+                          onclick="location.href='{% url 'axionaut_app:gas_neutral' %}'"></button>
+                        <button id='dir_neutral' type="submit" class="btn btn-outline-primary" data-mode="down"
+                    onclick="location.href='{% url 'axionaut_app:dir_neutral' %}'"></button>
+                        <button id='right' type="submit" class="btn btn-outline-primary" data-mode="right"
+                    onclick="location.href='{% url 'axionaut_app:dir_right' %}'">➡</button>
+                    </div>
+            <div>
+                <button id='down' type="submit" class="btn btn-outline-primary" data-mode="down"
+                onclick="location.href='{% url 'axionaut_app:gas_backward' %}'">⬇</button>
+            </div>
+            </div>
+         </div>
+
+        <br />
+        </div>
+    </div>
+    <div id="dashboard-up">
+        <h1 class="dashboard-title">Dashboard</h1>
+        <div id="directions">
+            <!-- Stream/Picture -->
+            <div id="streaming2">
+                <h1>Données</h1>
+                <strong> Vitesse :</strong>
+            </div>
+            <div id="commandes2"> 
+                <h1 class="dashboard-commandes2">Directions</h1>
+                <strong> Direction : </strong> <br/>
+                <strong> Angle : </strong> <br/>
+                <strong> Vitesse : </strong> <br/>
+                
+               
+            </div>
+            </div>
+         </div>
+
+        <br />
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8" />
 
-    <title>Accueil</title>
+    <title>Training</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'axionaut_app/css/style.css' %}" />
 
@@ -60,18 +62,21 @@
 </head>
 
 <body>
+
     <header>
-        <div class="title">
-            <h1 class="bienve"> Training mode</h1>
+        <div class="container" >
+            <button id="menu" type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
+            <h1 class="display-1">Training mode</h1>
         </div>
-        <button id="menu" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
+
 
     </header>
+
     <br>
-    <div id="start_stop">
+    <div class="text-center">
         <div>
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button id="start_stop_button" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
+            <div role="group" aria-label="First group">
+                <button id="start_stop_button" type="submit"  data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
             </div>
         </div>
     </div>
@@ -88,13 +93,12 @@
                 <h1>Streaming</h1>
                 <img src="{% url 'axionaut_app:video' %}">
             </div>
-            <div id="commandes"> 
-                <h1 class="dashboard-commandes">Commandes</h1>
+            <div class="text-right"> 
+                <h1>Commandes</h1>
                 <div class="form-group-commandes col-md-12">
-                     <label>Pilotage</label><br />
                     <button id='up' type="submit" class="btn btn-outline-primary" data-mode="up"
                     onclick="location.href='{% url 'axionaut_app:gas_forward' %}'">⬆</button>
-                     <div class="btn-group mr-2" role="group" aria-label="First group">
+                     <div role="group" aria-label="First group">
                 
                         <button id='left' type="submit" class="btn btn-outline-primary" data-mode="left"
                        onclick="location.href='{% url 'axionaut_app:dir_left' %}'">⬅</button>
@@ -115,21 +119,21 @@
         <br />
         </div>
     </div>
-    <div id="dashboard-up">
-        <h1 class="dashboard-title">Dashboard</h1>
-        <div id="directions">
-            <!-- Stream/Picture -->
-            <div id="streaming2">
-                <h1>Données</h1>
-                <strong> Vitesse :</strong>
+</br>
+    <div class="text-center">
+        <h1>Dashboard</h1>
+        <div id="dashboard" >
+            <div >
+                <strong  > Mode : </strong> {{car.mode}}<br/>
+                <strong   > Modele : </strong> {{car.model}}<br/>
             </div>
-            <div id="commandes2"> 
-                <h1 class="dashboard-commandes2">Directions</h1>
-                <strong> Direction : </strong> <br/>
-                <strong> Angle : </strong> <br/>
-                <strong> Vitesse : </strong> <br/>
-                
-               
+            <div  >
+                <strong class="text-center"> Direction : </strong>{{car.dir}} <br/> 
+                <strong> Gas :  </strong> {{car.gas}}<br/>
+            </div>
+            <div > 
+                <strong  class="text-right">  Speed : </strong> {{car.speed_mode}}<br/>
+
             </div>
             </div>
          </div>

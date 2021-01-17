@@ -35,7 +35,16 @@ def video(request):
 
 def commandes(request):
     car.switch_mode("training")
-    return render(request, 'axionaut_app/commandes.html', {})
+
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def auto(request):

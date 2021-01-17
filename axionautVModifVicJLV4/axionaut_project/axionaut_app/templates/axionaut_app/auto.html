@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Accueil</title>
+    <title>Auto</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'axionaut_app/css/style.css' %}" />
 
@@ -18,54 +20,47 @@
                 document.getElementById('menu').click()
             }
         });
-
-
     </script>
+
 </head>
 
 <body>
-    <header>
-        <div id="Textebienv">
-            <h1 class="bienve"> Auto mode</h1>
-        </div>
-        <button id="menu" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Menu Principal</button>
+    <button id="menu" type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
 
+    <header>
+        <div class="text-center" >
+            <h1 class="display-1">Auto Pilote</h1>
+        </div>
     </header>
+
     <br>
-    <div id="start_stop">
+    <div class="text-center">
         <div class="form-group col-md-12">
-            <label>Démarrage</label><br />
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button id="start_stop_button" type="submit" class="btn btn-outline-primary" data-mode="down" onclick="location.href='{% url 'start_stop_auto' %}'">Start/Stop</button> 
+             <div  role="group" aria-label="First group">
+                <button id="start_stop_button" type="submit"  data-mode="down" onclick="location.href='{% url 'start_stop_auto' %}'">Start/Stop</button> 
             </div>
         </div>
     </div>
     <br />
 
 
-    <div id="dashboard-up">
+    <div id="dashboard-title">
         <div id="directions">
             <!-- Stream/Picture -->
             <div id="streaming">
                 <h1>Streaming</h1>
                 <img src="{% url 'axionaut_app:video' %}">
             </div>
-            <div id="commandes"> 
+            <div class="text-right"> 
                 <div class="form-group-modeles col-md-12">
-                    <h1 class="dashboard-commandes">Modèles</h1>
-                        <div class="form-group" id="model-group">
-                            <label>Model </label>
+                    <h1>Modèles</h1>
+                        <div>
                             <br />
-          <!-- <select class="form-control" id="model_select">
-              <option selected>Choose model...</option>
-              {% for model in models %}
-              <option value='{{model}}'>{{model}}</option>
-              {% endfor %}
-          </select> -->
-                            <form method = "GET"> 
-                                {{ form }} 
-                                <input type = "submit" value = "Submit"> 
-                            </form> 
+                                <form method = "GET"> 
+                                    {{ form }} 
+                                    <input type = "submit" value = "Submit"> 
+                                </form> 
+                           
                         </div>
                 </div>
             </div>

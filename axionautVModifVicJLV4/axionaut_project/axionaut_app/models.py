@@ -37,12 +37,14 @@ class Ironcar():
 
         self.graph = None  # voir predict_from_img A QUOI CA SERT ?
         self.mode = 'resting'  # resting, training, auto or dirauto
-        # If True, car will move, if False car won't move.
+        # if True, car will move, if False car won't move.
         self.started = False
         self.model_loaded = False
         self.model = None
         self.current_model = None
-        self.direction = 3  # 1=hard left 2=left 3=straigth 4=right 5=hard right
+        self.curr_dir = 0
+        self.curr_gas = 0
+        self.speed_mode = 'constant'
         # Verbose is a general programming term for produce lots of logging output.
         self.verbose = True
         self.mode_function = self.default_call
@@ -53,8 +55,8 @@ class Ironcar():
 
         from threading import Thread
 
-        #self.camera_thread = Thread(target=self.camera_loop, args=())
-        # self.camera_thread.start()
+        # self.camera_thread = Thread(target=self.camera_loop, args=()) DECOMMENTER
+        # self.camera_thread.start() DECOMMENTER
 
         self.load_config()
 

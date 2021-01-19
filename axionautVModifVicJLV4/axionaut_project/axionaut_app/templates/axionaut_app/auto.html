@@ -25,11 +25,14 @@
 </head>
 
 <body>
-    <button id="menu" type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
+
+    
 
     <header>
-        <div class="text-center" >
-            <h1 class="display-1">Auto Pilote</h1>
+        <div id=container >
+            <button id="menu" type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
+            <h1 id="title" class="display-1">Auto Pilot</h1>
+            <img class="logo" src="{% static 'axionaut_app\images\logo-home-axionable.png' %}" />
         </div>
     </header>
 
@@ -46,11 +49,13 @@
 
     <div id="dashboard-title">
         <div id="directions">
-            <!-- Stream/Picture -->
+           <!-- Stream/Picture -->
             <div id="streaming">
                 <h1>Streaming</h1>
-                <img src="{% url 'axionaut_app:video' %}">
-            </div>
+                <div id="streaming-video">
+                <img src="{​​% url 'axionaut_app:video' %}​​">
+                </div>
+                </div>
             <div class="text-right"> 
                 <div class="form-group-modeles col-md-12">
                     <h1>Modèles</h1>

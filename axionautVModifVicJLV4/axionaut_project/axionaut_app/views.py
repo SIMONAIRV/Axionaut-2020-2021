@@ -56,7 +56,6 @@ def auto(request):
         models_name = [f for f in os.listdir(MODELS_PATH)]
 
     # switching mode
-    context = {}
     models = ModelsForm()
     car.switch_mode("auto")
 
@@ -71,10 +70,15 @@ def auto(request):
         else:
             if car.verbose:
                 print("model not loaded")
-
-    context['form'] = models
-
-    return render(request, 'axionaut_app/auto.html', context)
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode,
+        "form": models
+    }
+    return render(request, 'axionaut_app/auto.html', {"car": myCar})
 
 
 def menu(request):
@@ -83,41 +87,83 @@ def menu(request):
 
 def dir_neutral(request):
     car.direction = 3
-    print('direction : ', car.direction)
     car.on_dir(0)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def dir_left(request):
     car.direction = 2
-    print('direction : ', car.direction)
     car.on_dir(-1)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def dir_right(request):
     car.direction = 4
-    print('direction : ', car.direction)
     car.on_dir(1)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_neutral(request):
-    print('gas : 0')
     car.on_gas(0)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_forward(request):
-    print('gas : 1')
     car.on_gas(1)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_backward(request):
-    print('gas : -1')
     car.on_gas(-1)
-    return render(request, 'axionaut_app/commandes.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
+
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def start_stop(request):
@@ -132,8 +178,15 @@ def start_stop(request):
     # Stop the gas before switching mode and reset wheel angle (safe)
     # car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
     # car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode
 
-    return render(request, 'axionaut_app/commandes.html', {})
+    }
+    return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def start_stop_auto(request):
@@ -147,5 +200,14 @@ def start_stop_auto(request):
     # Stop the gas before switching mode and reset wheel angle (safe)
     # car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
     # car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
+    models = ModelsForm()
 
-    return render(request, 'axionaut_app/auto.html', {})
+    myCar = {
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
+        "mode": car.mode,
+        "form": models
+    }
+    return render(request, 'axionaut_app/auto.html', {"car": myCar})

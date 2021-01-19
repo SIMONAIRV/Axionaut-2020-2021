@@ -31,7 +31,7 @@
     <header>
         <div id=container >
             <button id="menu" type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
-            <h1 id="title" class="display-1">Auto Pilot</h1>
+            <h1 id="title">AUTO PILOT</h1>
             <img class="logo" src="{% static 'axionaut_app\images\logo-home-axionable.png' %}" />
         </div>
     </header>
@@ -47,8 +47,7 @@
     <br />
 
 
-    <div id="dashboard-title">
-        <div id="directions">
+        <div id="control">
            <!-- Stream/Picture -->
             <div id="streaming">
                 <h1>Streaming</h1>
@@ -61,16 +60,48 @@
                     <h1>Modèles</h1>
                         <div>
                             <br />
-                                <form method = "GET"> 
-                                    {{ form }} 
+                                <form id="form" method = "GET"> 
+                                    {{ car.form }} 
                                     <input type = "submit" value = "Submit"> 
+
                                 </form> 
+
                            
                         </div>
                 </div>
             </div>
 
         <br />
+        </div>
+
+
+        <!-- Dashboard -->
+    <div>
+        <div  class="boxDashboardTitle">
+            <h1 style="line-height:90px; font-size: 3.2em;">
+                DASHBOARD
+            </h1>
+            <p><img class="img-dashboard" src="{% static 'axionaut_app\images\speedometer.png' %}"/></p>
+        </div>
+       
+        
+        <div id="dashboard" >
+            <div>
+                <div>
+                    <div class="box"> <strong > Mode  </strong> <p style="margin-left: 8%;"> {{car.mode}}</p> <br/> </div>
+
+                    <div class="box"> <strong > Modele  </strong> <p style="margin-left: 8%;"> {{car.model}}</p> <br/> </div>
+
+                </div>
+            </div>
+           
+            <div >
+                <div class="box"> <strong > Direction  </strong> <p style="margin-left: 8%;"> {{car.dir}}</p> <br/> </div>
+                <div class="box"> <strong > Gas  </strong> <p style="margin-left: 8%;"> {{car.gas}}</p> <br/> </div>
+            </div>
+            <div > 
+                <div class="box"> <strong > Speed  </strong> <p style="margin-left: 8%;"> {{car.speed_mode}}</p> <br/> </div>
+            </div>
         </div>
     </div>
 </body>

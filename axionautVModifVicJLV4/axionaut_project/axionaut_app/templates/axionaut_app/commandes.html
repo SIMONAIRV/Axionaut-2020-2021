@@ -65,8 +65,8 @@
 
     <header>
         <div id="container" >
-            <button type="submit"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Retour</button>
-            <h2 id="title" class="display-1">Training mode</h2>
+            <button type="button_return"  class="btn btn-secondary" data-mode="down" onclick="location.href='{% url 'menu' %}'">Back</button>
+            <h2 id="title">TRAINING</h2>
             <img class="logo" src="{% static 'axionaut_app\images\logo-home-axionable.png' %}" />
 
         </div>
@@ -83,8 +83,7 @@
 <br />
     </div>
 
-    <div id="dashboard-up">
-        <div id="directions">
+        <div id="control">
            <!-- Stream/Picture -->
             <div id="streaming">
                 <h1>Streaming</h1>
@@ -113,17 +112,20 @@
                 onclick="location.href='{% url 'axionaut_app:gas_backward' %}'">⬇</button>
             </div>
             </div>
-         </div>
 
         <br />
         </div>
     </div>
 </br>
-    <div class="text-center">
-        <div  id="boxDashboardTitle">
-            <h1 class="text-center">Dashboard</h1> 
-            <img id="overlay" src="{% static 'axionaut_app\images\speedometer.png' %}" width="75" height="75"/>
+<!-- Dashboard -->
+    <div>
+        <div  class="boxDashboardTitle">
+            <h1 style="line-height:90px; font-size: 3.2em;">
+                DASHBOARD
+            </h1>
+            <p><img class="img-dashboard" src="{% static 'axionaut_app\images\speedometer.png' %}"/></p>
         </div>
+       
         
         <div id="dashboard" >
             <div>

@@ -8,7 +8,6 @@ with open(CONFIG) as json_file:
     MODELS_PATH = config['models_path']
 
 models = []
-print(os.path.isdir(MODELS_PATH))
 if os.path.isdir(MODELS_PATH):
     #models = [os.path.join(MODELS_PATH, f) for f in os.listdir(MODELS_PATH) if f.endswith('.hdf5')]
     models = [f for f in os.listdir(MODELS_PATH)]
@@ -21,4 +20,4 @@ model_choices = tuple(list_tuples)
 
 
 class ModelsForm(forms.Form):
-    Models = forms.ChoiceField(choices=model_choices)
+    models = forms.ChoiceField(choices=model_choices, label='')

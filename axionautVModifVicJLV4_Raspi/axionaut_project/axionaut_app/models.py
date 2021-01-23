@@ -118,11 +118,11 @@ class Ironcar():
 
         for field in ['commands', 'fps', 'datasets_path', 'stream_path', 'models_path']: # DECOMMENTER
             if field not in config:
-            raise ConfigException(error_message.format(field))
+                raise ConfigException(error_message.format(field))
 
         for field in ["dir_pin", "gas_pin", "left", "straight", "right", "stop","neutral", "drive", "drive_max", "invert_dir"]: # DECOMMENTER
             if field not in config['commands']:
-            raise ConfigException(error_message.format('[commands][{}]'.format(field)))
+                raise ConfigException(error_message.format('[commands][{}]'.format(field)))
 
         self.commands = config['commands']
         self.fps = config['fps']
@@ -161,7 +161,7 @@ class Ironcar():
             cam = PiCamera(framerate=self.fps)
         except Exception as e:
             print('Exception ', e, 'Error cam')
-            raise CameraException() DECOMMENTER
+            raise CameraException() #DECOMMENTER
 
         image_name = os.path.join(self.stream_path, 'capture.jpg')
 
@@ -370,7 +370,7 @@ class Ironcar():
         if self.mode not in ['training']:
             if self.verbose:
                 print('Ignoring dir command')
-            return
+                return
 
         self.curr_dir = self.commands['invert_dir'] * float(data)
         if self.curr_dir == 0:
@@ -468,8 +468,8 @@ class Ironcar():
         self.started = False
 
         # Stop the gas before switching mode and reset wheel angle (safe)
-        self.gas(self.commands['neutral']) DECOMMENTER
-        self.dir(self.commands['straight']) DECOMMENTER
+        self.gas(self.commands['neutral'])# DECOMMENTER
+        self.dir(self.commands['straight']) #DECOMMENTER
 
         if new_mode == "auto":
             self.mode = 'auto'
@@ -487,8 +487,8 @@ class Ironcar():
 
         # Make sure we stopped and reset wheel angle even if the previous mode
         # sent a last command before switching.
-        self.gas(self.commands['neutral']) DECOMMENTER
-        self.dir(self.commands['straight']) DECOMMENTER
+        self.gas(self.commands['neutral']) #DECOMMENTER
+        self.dir(self.commands['straight']) #DECOMMENTER
 
         if self.verbose:
             print('switched to mode : ', new_mode)

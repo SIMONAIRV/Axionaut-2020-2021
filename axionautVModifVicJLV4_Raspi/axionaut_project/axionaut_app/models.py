@@ -17,7 +17,7 @@ CONFIG = './config.json'
 import RPi.GPIO as GPIO        
 import time
 
-GPIO.Mode(BOARD / BCM)
+#GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BCM)
 
 GPIO_TRIGGER = 18

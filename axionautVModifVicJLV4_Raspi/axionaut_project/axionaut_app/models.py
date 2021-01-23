@@ -79,7 +79,7 @@ class Ironcar():
 """
     def gas(self, value):  # puissance/vitesse de la voiture
         # Sends the pwm signal on the gas channel
-    """
+"""
         if self.pwm is not None:
             self.pwm.set_pwm(self.commands['gas_pin'], 0, value)
             if self.verbose:
@@ -87,11 +87,11 @@ class Ironcar():
         else:
             if self.verbose:
                 print('GAS : ', value)
-                """
+"""
         pass
 
     def dir(self, value):
-        """
+"""
         # Sends the pwm signal on the dir channel
 
         if self.pwm is not None:
@@ -104,7 +104,7 @@ class Ironcar():
                 # print('PWM module not loaded')
                 print('DIR : ', value)
 
-       """ 
+""" 
         pass
 
     def default_call(self, img, prediction):

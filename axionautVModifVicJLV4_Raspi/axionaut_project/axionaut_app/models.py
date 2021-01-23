@@ -18,14 +18,14 @@ import RPi.GPIO as GPIO
 import time
 
 #GPIO Mode (BOARD / BCM)
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
 
-GPIO_TRIGGER = 18
-GPIO_ECHO = 24
+#GPIO_TRIGGER = 18
+#GPIO_ECHO = 24
 
 # set GPIO direction (IN / OUT)
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
+#GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+#GPIO.setup(GPIO_ECHO, GPIO.IN)
 
 
 class Ironcar():

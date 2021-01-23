@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^gas_neutral/$', views.gas_neutral, name="gas_neutral"),
     url(r'^gas_backward/$', views.gas_backward, name="gas_backward"),
     url(r'^gas_forward/$', views.gas_forward, name="gas_forward"),
-    url(r'^video', views.video, name="video"),
+    url(r'^video/$', views.video, name="video"),
     url(r'^start_stop_auto/$', views.start_stop_auto, name='start_stop_auto'),
 
 ]

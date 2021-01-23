@@ -6,7 +6,7 @@ from django.http.response import StreamingHttpResponse
 
 from .models import Ironcar
 
-# from axionaut_app.camera import Camera DECOMMENTER
+#from axionaut_app.camera import Camera
 
 import json
 import os
@@ -61,7 +61,7 @@ def auto(request):
 
     # loading model
     if request.GET:
-        temp = request.GET['Models']
+        temp = request.GET['models']
         model_name = models_name[int(temp)]
         print('SERVER : models : ', model_name)
         car.select_model(model_name)

@@ -6,7 +6,7 @@ from django.http.response import StreamingHttpResponse
 
 from .models import Ironcar
 
-#from axionaut_app.camera import Camera
+from axionaut_app.camera import Camera
 
 import json
 import os

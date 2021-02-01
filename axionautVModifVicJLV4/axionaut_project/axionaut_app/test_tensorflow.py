@@ -1,7 +1,7 @@
-import tensorflow
-from keras.models import load_model
-try:
-    model = load_model("../models/model_test3.h5")
-    print(model.summary())
-except:
-    print("Error!")
+HL = -1 * (432 - 275)/2 + 350
+L = -0.5 * (422 -275)/2 + 350
+S = 0 * (422 - 275)/2 + 350
+R = 0.5 * (422 - 275)/2 + 350
+HR = 1 * (422 - 275)/2 + 350
+
+print(HL, L, S, R, HR)

@@ -14,6 +14,7 @@ from .forms import ModelsForm
 from PIL import Image
 import io
 import numpy as np
+from datetime import datetime
 
 car = Ironcar()
 
@@ -27,6 +28,9 @@ def gen_training(camera):
 
     while True:
         frame = camera.get_frame()
+        img = np.array(Image.open(io.BytesIO(frame)))
+        if car.started == True:
+            car.training(img)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -62,13 +66,22 @@ def commandes(request):
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
+        "mode": car.mode,
+        "status": car.status
 
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def auto(request):
+
+    if car.started == False:
+        started = True
+        car.status = "Start"
+    else:
+        started = False
+        car.status = "Stop"
+    car.started = started
     # getting list of models
     models = []
     if os.path.isdir(MODELS_PATH):
@@ -78,7 +91,6 @@ def auto(request):
 
     # switching mode
     models = ModelsForm()
-    print("(SERVER) length models = ", models)
     car.switch_mode("auto")
 
     # loading model
@@ -92,13 +104,18 @@ def auto(request):
         else:
             if car.verbose:
                 print("model not loaded")
+        print("(SERVER) after loading started: ", car.started)
+
+   
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
         "mode": car.mode,
-        "form": models
+        "form": models,
+        "status": car.status
     }
     return render(request, 'axionaut_app/auto.html', {"car": myCar})
 
@@ -189,49 +206,59 @@ def gas_backward(request):
 
 
 def start_stop(request):
-
-    if car.started == True:
-        started = False
+    
+    if car.started == False:
+        started = True
+        car.status = "Start"
     else:
         started = False
+        car.status = "Stop"
 
     car.started = started
 
+    
+
     # Stop the gas before switching mode and reset wheel angle (safe)
-    # car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
-    # car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
+    car.gas(car.commands['neutral']) # pwm setup DECOMMENTER
+    car.dir(car.commands['straight']) # pwm setup DECOMMENTER
     myCar = {
-        "speed_mode": car.speed_mode,
-        "model": car.current_model,
-        "gas": car.curr_gas,
-        "dir": car.curr_dir,
-        "mode": car.mode
+    "speed_mode": car.speed_mode,
+    "model": car.current_model,
+    "gas": car.gas_on_value,
+    "dir": car.dir_on_value,
+    "mode": car.mode,
+    "status": car.status
 
     }
+   
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
-
 def start_stop_auto(request):
-    if car.started == True:
-        started = False
+
+     
+    if car.started == False:
+        started = True
+        car.status = "Start"
     else:
         started = False
+        car.status = "Stop"
 
     car.started = started
     print("(SERVER) car.started = ", car.started)
 
+
     # Stop the gas before switching mode and reset wheel angle (safe)
-    # car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
-    # car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
+    car.gas(car.commands['neutral']) # pwm setup DECOMMENTER
+    car.dir(car.commands['straight']) # pwm setup DECOMMENTER
     models = ModelsForm()
 
-
     myCar = {
-        "speed_mode": car.speed_mode,
-        "model": car.current_model,
-        "gas": car.curr_gas,
-        "dir": car.curr_dir,
-        "mode": car.mode,
-        "form": models
+    "speed_mode": car.speed_mode,
+    "model": car.current_model,
+    "gas": car.gas_on_value,
+    "dir": car.dir_on_value,
+    "mode": car.mode,
+    "form": models,
+    "status": car.status
     }
-    return render(request, 'axionaut_app/auto.html', {"car": myCar})
+    return render(request, 'axionaut_app/auto2.html', {"car": myCar})

@@ -36,11 +36,14 @@ class Ironcar():
         self.current_model = None
         self.curr_dir = 0
         self.curr_gas = 0
-        self.max_speed_rate = 0.5
+        self.max_speed_rate = 0.7
         self.speed_mode = 'constant'
         # Verbose is a general programming term for produce lots of logging output.
-        self.verbose = True
+        self.verbose = False
         self.mode_function = self.default_call
+        self.dir_on_value = 0 # Valeur du dir a afficher sur l'interface
+        self.gas_on_value = 0 # Valeur du gas a afficher sur l'interface
+        self.status = "Stop"
 
         # Camera Attribut
         #self.streaming_state = False
@@ -74,10 +77,10 @@ class Ironcar():
         if self.pwm is not None:
             self.pwm.set_pwm(self.commands['gas_pin'], 0, value)
             if self.verbose:
-                print('(SERVER) GAS : ', value)
+                print('(SERVER) GAS: ', value)
         else:
             if self.verbose:
-                print('(SERVER) GAS : ', value)
+                print('(SERVER) GAS: ', value)
 
     def dir(self, value):
         # Sends the pwm signal on the dir channel
@@ -86,11 +89,11 @@ class Ironcar():
             # (channel ,on time start, value)
             self.pwm.set_pwm(self.commands['dir_pin'], 0, value)
             if self.verbose:
-                print('(SERVER) DIR : ', value)
+                print('(SERVER) DIR: ', value)
         else:
             if self.verbose:
                 # print('PWM module not loaded')
-                print('(SERVER) DIR : ', value)
+                print('(SERVER) DIR: ', value)
 
         
 
@@ -99,41 +102,43 @@ class Ironcar():
         pass
 
     def load_config(self):
-        #if not os.path.isfile(CONFIG): DECOMMENTER
-        #raise ConfigException('The config file `{}` does not exist'.format(CONFIG))
+        #if not os.path.isfile(CONFIG):
+            #raise ConfigException('The config file `{}` does not exist'.format(CONFIG))
 
         with open(CONFIG) as json_file:
             config = json.load(json_file)
 
         # Verify that the config file has the good fields
             error_message = '{} is not present in the config file'
+            
+        #for field in ['commands', 'fps', 'datasets_path', 'stream_path', 'models_path']:
+            #if field not in config:
+                #raise ConfigException(error_message.format(field))
 
-        #for field in ['commands', 'fps', 'datasets_path', 'stream_path', 'models_path']: DECOMMENTER
-            # if field not in config:
-            #raise ConfigException(error_message.format(field))
-
-        #for field in ["dir_pin", "gas_pin", "left", "straight", "right", "stop","neutral", "drive", "drive_max", "invert_dir"]: DECOMMENTER
-            # if field not in config['commands']:
-            #raise ConfigException(error_message.format('[commands][{}]'.format(field)))
-
+        #for field in ["dir_pin", "gas_pin", "left", "straight", "right", "stop","neutral", "drive", "drive_max", "invert_dir"]:
+            #if field not in config['commands']:
+                #raise ConfigException(error_message.format('[commands][{}]'.format(field)))
+        
         self.commands = config['commands']
         self.fps = config['fps']
 
         # Folder to save the stream in training to create a dataset
         # Only used in training mode
         from datetime import datetime
-        if self.mode == "training":
-            ct = datetime.now().strftime('%Y_%m_%d_%H_%M')
-            self.save_folder = os.path.join(config['datasets_path'], str(ct))
-            if not os.path.exists(self.save_folder):
-                os.makedirs(self.save_folder)
-            # Folder used to save the stream when the stream is on
-            # print(config['stream_path'])
-            self.stream_path = config['stream_path']
-            if not os.path.exists(self.stream_path):
-                os.makedirs(self.stream_path)
+
+        ct = datetime.now().strftime('%Y_%m_%d_%H_%M')
+        self.save_folder = os.path.join(config['datasets_path'], str(ct))
+        if not os.path.exists(self.save_folder):
+            os.makedirs(self.save_folder)
+        #print(self.stream_path)
+        # Folder used to save the stream when the stream is on
+        #print(config['stream_path'])
+        self.stream_path = config['stream_path']
+        if not os.path.exists(self.stream_path):
+            os.makedirs(self.stream_path)
 
         return config
+
 
     def predict_from_img(self, img):
         """Given the 250x150 image from the Pi Camera.
@@ -156,11 +161,13 @@ class Ironcar():
 
         return pred
 
-    def pred_direction(prediction):
+    def pred_direction(self, prediction):
         '''
         Transforme un chiffre en mot.       
         '''
-        pass
+        directions = ["hard left", "left", "straight", "right", "hard right"]
+
+        return directions[prediction]
 
     def autopilot(self, img, prediction):
         """Sends the pwm gas and dir values according to the prediction of the
@@ -170,35 +177,39 @@ class Ironcar():
         prediction: array of softmax
         """
 
-        print("prediction out: ", prediction)
-
-        self.started = True
+        
+        #print("(SERVER) CURRENT_MODEL: ", self.current_model)
         if self.started: 
-           
-            coeffs = [0.35, 0.7, 1., 0.7, 0.35]
-            speed_mode_coef = coeffs[prediction]
-            print('speed_mode_coef: {}'.format(speed_mode_coef))
 
-            local_dir = -1 + 2 * float(prediction)/float(4)
+            print("(SERVER) PREDICTION: ", self.pred_direction(prediction))
+            coeffs = [0.45, 0.7, 1., 0.7, 0.45]
+            speed_mode_coef = coeffs[prediction]
+            #print('speed_mode_coef: {}'.format(speed_mode_coef))
+
+            local_dir = -(-1 + 2 * float(prediction)/float(4)) # On inverse pour que les signeaux coïncide bien avec les directions des roues
             local_gas = self.max_speed_rate * speed_mode_coef
 
             gas_value = int(local_gas * (self.commands['drive_max'] - self.commands['drive']) + self.commands['drive'])
             dir_value = int(local_dir * (self.commands['right'] - self.commands['left'])/2. + self.commands['straight'])
-
+            self.dir_on_value = dir_value
+            self.gas_on_value = gas_value
+            #print("(SERVER) self.started: True")
+            
             self.gas(gas_value)
             self.dir(dir_value)
 
         else:
             gas_value = self.commands['neutral']
             dir_value = self.commands['straight']
+            #print("(Server) self.started: False")
             self.gas(gas_value)
             self.dir(dir_value)
 
  
     
-    def training(self, img, prediction):
-        """Saves the image of the picamera with the right labels of dir
-        and gas.
+    def training(self, img):
+        """
+        Enregistre les images du stream lorsque started = True.
         """
 
         image_name = '_'.join(['frame', str(self.n_img), 'gas',
@@ -213,7 +224,6 @@ class Ironcar():
         self.n_img += 1
     
 
-    '''
     def on_gas(self, data):
         """Triggered when a value from the keyboard/gamepad is received for gas.
 
@@ -263,7 +273,6 @@ class Ironcar():
             new_value = int(
                 self.curr_dir * (self.commands['right'] - self.commands['left'])/2. + self.commands['straight'])
         self.dir(new_value)
-    '''
 
     def max_speed_update(self, new_max_speed):
         """Changes the max_speed of the car."""
@@ -298,7 +307,7 @@ class Ironcar():
             if get_default_graph is None:
                 try:
                     import tensorflow
-                    # from tensorflow import get_default_graph
+                    import autokeras as ak
                     from keras.models import load_model
                     print("(SERVER) importation of the packages")
                 except Exception as e:
@@ -314,19 +323,18 @@ class Ironcar():
             if self.verbose:
                 print('Selected model: ', model_name)
 
-            self.model = load_model(model_name)  
+            self.model = load_model(model_name, custom_objects=ak.CUSTOM_OBJECTS)  
             self.current_model = model_name
             self.model_loaded = True
             self.switch_mode(self.mode)
 
-            data = {'type': 'success', 'msg': 'The model {} has been successfully loaded'.format(
-                self.current_model)}
+            data = {'type': 'success', 'msg': 'The model {} has been successfully loaded'.format(self.current_model)}
             print(data)
+            print("(SERVER) CURRENT_MODEL: ", self.current_model)
 
             if self.verbose:
-                print('The model {} has been successfully loaded'.format(
-                    self.current_model))
-
+                print('The model {} has been successfully loaded'.format(self.current_model))
+            
         except Exception as e:
             data = {'type': 'danger', 'msg': 'Error while loading model {}. Got error {}'.format(
                 model_name, e)}
@@ -359,7 +367,7 @@ class Ironcar():
                     print("(SERVER) model not loaded")
         elif new_mode == "training":
             self.mode = 'training'
-            self.mode_function = self.training
+            #self.mode_function = self.training
         else:
             self.mode = 'resting'
             self.mode_function = self.default_call
@@ -370,4 +378,4 @@ class Ironcar():
         # self.dir(self.commands['straight']) DECOMMENTER
 
         if self.verbose:
-            print('(SERVER) switched to mode : ', new_mode)
+            print('(SERVER) switched to mode: ', new_mode)

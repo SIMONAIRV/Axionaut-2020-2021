@@ -13,11 +13,11 @@ CONFIG = './config.json'
 # Create your models here.
 
 # Instructions for the rasperry
-import RPi.GPIO as GPIO        
-import time
+#import RPi.GPIO as GPIO        
+#import time
 
 #GPIO Mode (BOARD / BCM)
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
 
 
 class Ironcar():
@@ -49,14 +49,15 @@ class Ironcar():
         #self.streaming_state = False
         self.n_img = 0
 
-        from threading import Thread
+        #from threading import Thread
 
         # self.camera_thread = Thread(target=self.camera_loop, args=()) DECOMMENTER
         # self.camera_thread.start() DECOMMENTER
 
-        self.load_config()
+        #self.load_config()
 
         # PWM setup
+        '''
         try:
             from Adafruit_PCA9685 import PCA9685
 
@@ -68,7 +69,7 @@ class Ironcar():
             print('The adafruit error: ', e)
             self.pwm = None
 
-
+        '''
         
 
     def gas(self, value):  # puissance/vitesse de la voiture
@@ -307,7 +308,7 @@ class Ironcar():
             if get_default_graph is None:
                 try:
                     import tensorflow
-                    import autokeras as ak
+                    #import autokeras as ak
                     from keras.models import load_model
                     print("(SERVER) importation of the packages")
                 except Exception as e:

@@ -10,7 +10,7 @@ from .models import Ironcar
 
 import json
 import os
-from .forms import ModelsForm
+from .forms import ModelsForm, folderForm
 from PIL import Image
 import io
 import numpy as np
@@ -60,6 +60,18 @@ def video_auto(request):
 
 def commandes(request):
     car.switch_mode("training")
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        print('XXXXXXXXXXXXXXXXXXX')
+
+        print(temp)
+
+        folder = folders[int(temp)-1]
+        print(folder)
+        car.save_image(folder)
 
     myCar = {
         "speed_mode": car.speed_mode,
@@ -67,8 +79,8 @@ def commandes(request):
         "gas": car.curr_gas,
         "dir": car.curr_dir,
         "mode": car.mode,
-        "status": car.status
-
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
@@ -90,7 +102,6 @@ def auto(request):
         models_name = [f for f in os.listdir(MODELS_PATH)]
 
     # switching mode
-    models = ModelsForm()
     car.switch_mode("auto")
 
     # loading model
@@ -106,7 +117,7 @@ def auto(request):
                 print("model not loaded")
         print("(SERVER) after loading started: ", car.started)
 
-   
+    models = ModelsForm()
 
     myCar = {
         "speed_mode": car.speed_mode,
@@ -206,7 +217,7 @@ def gas_backward(request):
 
 
 def start_stop(request):
-    
+
     if car.started == False:
         started = True
         car.status = "Start"
@@ -216,26 +227,24 @@ def start_stop(request):
 
     car.started = started
 
-    
-
     # Stop the gas before switching mode and reset wheel angle (safe)
-    car.gas(car.commands['neutral']) # pwm setup DECOMMENTER
-    car.dir(car.commands['straight']) # pwm setup DECOMMENTER
+    car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
+    car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
     myCar = {
-    "speed_mode": car.speed_mode,
-    "model": car.current_model,
-    "gas": car.gas_on_value,
-    "dir": car.dir_on_value,
-    "mode": car.mode,
-    "status": car.status
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.gas_on_value,
+        "dir": car.dir_on_value,
+        "mode": car.mode,
+        "status": car.status
 
     }
-   
+
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
+
 
 def start_stop_auto(request):
 
-     
     if car.started == False:
         started = True
         car.status = "Start"
@@ -246,19 +255,18 @@ def start_stop_auto(request):
     car.started = started
     print("(SERVER) car.started = ", car.started)
 
-
     # Stop the gas before switching mode and reset wheel angle (safe)
-    car.gas(car.commands['neutral']) # pwm setup DECOMMENTER
-    car.dir(car.commands['straight']) # pwm setup DECOMMENTER
+    car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
+    car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
     models = ModelsForm()
 
     myCar = {
-    "speed_mode": car.speed_mode,
-    "model": car.current_model,
-    "gas": car.gas_on_value,
-    "dir": car.dir_on_value,
-    "mode": car.mode,
-    "form": models,
-    "status": car.status
+        "speed_mode": car.speed_mode,
+        "model": car.current_model,
+        "gas": car.gas_on_value,
+        "dir": car.dir_on_value,
+        "mode": car.mode,
+        "form": models,
+        "status": car.status
     }
     return render(request, 'axionaut_app/auto2.html', {"car": myCar})

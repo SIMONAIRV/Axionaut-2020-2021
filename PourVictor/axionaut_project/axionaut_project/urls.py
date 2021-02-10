@@ -28,8 +28,6 @@ urlpatterns = [
                                     'axionaut_app'), namespace='axionaut_app')),
     url(r'^start_stop/$', views.start_stop, name='start_stop'),
     url(r'^start_stop_auto/$', views.start_stop_auto, name='start_stop_auto'),
-    url(r'^start_stop_auto/$', views.start_stop_auto, name='start_stop_auto'),
-
 ]
 
 if settings.DEBUG:

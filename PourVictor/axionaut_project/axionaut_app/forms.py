@@ -2,6 +2,7 @@ from django import forms
 import json
 import os
 
+
 CONFIG = './config.json'
 with open(CONFIG) as json_file:
     config = json.load(json_file)
@@ -21,3 +22,12 @@ model_choices = tuple(list_tuples)
 
 class ModelsForm(forms.Form):
     models = forms.ChoiceField(choices=model_choices, label='')
+
+
+folder_choices = ((1, 'Hard Left'), (2, 'Left'),
+                  (3, 'Straight'), (4, 'Right'), (5, 'Hard Right'))
+
+
+class folderForm(forms.Form):
+    folders = forms.ChoiceField(
+        choices=folder_choices, label='')

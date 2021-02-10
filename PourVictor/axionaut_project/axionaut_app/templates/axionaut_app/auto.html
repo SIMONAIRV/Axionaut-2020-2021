@@ -38,10 +38,27 @@
 
     <br>
     <div class="text-center">
-        <div class="form-group col-md-12">
-             <div  role="group" aria-label="First group">
-                <button id="start_stop_button" type="submit"  data-mode="down" onclick="location.href='{% url 'start_stop_auto' %}'">Start/Stop</button> 
+        <div>
+            <div role="group" aria-label="First group">
+                <button id="start_stop_button"  onclick="location.href='{% url 'start_stop_auto' %}'">Start</button> 
             </div>
+
+            <script >
+                    var mycar = '{{car|escapejs }}' //getting context but in this js script
+                    var jsonCar = JSON.parse(mycar); //converting because mycar is encoded
+
+                    if(jsonCar.started==true){
+                        document.getElementById('start_stop_button').style.background = "red";
+                        document.getElementById('start_stop_button').innerHTML = "Stop";
+
+                    }
+                    else{
+                        document.getElementById('start_stop_button').style.background = "#00FF33";
+                        document.getElementById('start_stop_button').innerHTML = "Start";
+                    }                    
+            
+                 
+            </script> 
         </div>
     </div>
     <br />
@@ -60,7 +77,6 @@
                                 <form id="form" method = "GET"> 
                                     {{ car.form }} 
                                     <input type = "submit" value = "Submit"> 
-
                                 </form> 
 
                            

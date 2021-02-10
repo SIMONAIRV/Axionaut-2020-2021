@@ -1,3 +1,4 @@
+import time
 from PIL.Image import fromarray as PIL_convert
 from django.db import models
 import numpy as np
@@ -13,11 +14,10 @@ CONFIG = './config.json'
 # Create your models here.
 
 # Instructions for the rasperry
-#import RPi.GPIO as GPIO        
-import time
+#import RPi.GPIO as GPIO
 
-#GPIO Mode (BOARD / BCM)
-#GPIO.setmode(GPIO.BCM)
+# GPIO Mode (BOARD / BCM)
+# GPIO.setmode(GPIO.BCM)
 
 
 class Ironcar():
@@ -41,8 +41,8 @@ class Ironcar():
         # Verbose is a general programming term for produce lots of logging output.
         self.verbose = False
         self.mode_function = self.default_call
-        self.dir_on_value = 0 # Valeur du dir a afficher sur l'interface
-        self.gas_on_value = 0 # Valeur du gas a afficher sur l'interface
+        self.dir_on_value = 0  # Valeur du dir a afficher sur l'interface
+        self.gas_on_value = 0  # Valeur du gas a afficher sur l'interface
         self.status = "Stop"
 
         # Camera Attribut
@@ -57,19 +57,16 @@ class Ironcar():
         self.load_config()
 
         # PWM setup
-        #try:
+        # try:
         #    from Adafruit_PCA9685 import PCA9685
 
         #    self.pwm = PCA9685()
         #    self.pwm.set_pwm_freq(60)
-        #except Exception as e:
+        # except Exception as e:
         #    print('The car ill not be able to move')
         #    print('Are you executing this code on your laptop?')
         #    print('The adafruit error: ', e)
         #    self.pwm = None
-
-
-        
 
     def gas(self, value):  # puissance/vitesse de la voiture
         # Sends the pwm signal on the gas channel
@@ -95,30 +92,28 @@ class Ironcar():
                 # print('PWM module not loaded')
                 print('(SERVER) DIR: ', value)
 
-        
-
     def default_call(self, img, prediction):
         # Default function call. Does nothing.
         pass
 
     def load_config(self):
-        #if not os.path.isfile(CONFIG):
-            #raise ConfigException('The config file `{}` does not exist'.format(CONFIG))
+        # if not os.path.isfile(CONFIG):
+        #raise ConfigException('The config file `{}` does not exist'.format(CONFIG))
 
         with open(CONFIG) as json_file:
             config = json.load(json_file)
 
         # Verify that the config file has the good fields
             error_message = '{} is not present in the config file'
-            
-        #for field in ['commands', 'fps', 'datasets_path', 'stream_path', 'models_path']:
-            #if field not in config:
-                #raise ConfigException(error_message.format(field))
 
-        #for field in ["dir_pin", "gas_pin", "left", "straight", "right", "stop","neutral", "drive", "drive_max", "invert_dir"]:
-            #if field not in config['commands']:
-                #raise ConfigException(error_message.format('[commands][{}]'.format(field)))
-        
+        # for field in ['commands', 'fps', 'datasets_path', 'stream_path', 'models_path']:
+            # if field not in config:
+            #raise ConfigException(error_message.format(field))
+
+        # for field in ["dir_pin", "gas_pin", "left", "straight", "right", "stop","neutral", "drive", "drive_max", "invert_dir"]:
+            # if field not in config['commands']:
+            #raise ConfigException(error_message.format('[commands][{}]'.format(field)))
+
         self.commands = config['commands']
         self.fps = config['fps']
 
@@ -130,15 +125,33 @@ class Ironcar():
         self.save_folder = os.path.join(config['datasets_path'], str(ct))
         if not os.path.exists(self.save_folder):
             os.makedirs(self.save_folder)
-        #print(self.stream_path)
+        # print(self.stream_path)
         # Folder used to save the stream when the stream is on
-        #print(config['stream_path'])
+        # print(config['stream_path'])
         self.stream_path = config['stream_path']
         if not os.path.exists(self.stream_path):
             os.makedirs(self.stream_path)
 
         return config
 
+    def save_image(self, folder):  # used when we select the folder where image will be saved
+        with open(CONFIG) as json_file:
+            config = json.load(json_file)
+        # Folder to save the stream in training to create a dataset
+        # Only used in training mode
+        from datetime import datetime
+
+        ct = datetime.now().strftime('%Y_%m_%d_%H_%M')
+        self.save_folder = os.path.join(
+            config['datasets_path'], str(ct), folder)
+        if not os.path.exists(self.save_folder):
+            os.makedirs(self.save_folder)
+        # print(self.stream_path)
+        # Folder used to save the stream when the stream is on
+        # print(config['stream_path'])
+        self.stream_path = config['stream_path']
+        if not os.path.exists(self.stream_path):
+            os.makedirs(self.stream_path)
 
     def predict_from_img(self, img):
         """Given the 250x150 image from the Pi Camera.
@@ -146,11 +159,11 @@ class Ironcar():
         """
         try:
             #img = np.array([img[20:, :, :]])
-            #with self.graph.as_default():
+            # with self.graph.as_default():
             pred = self.model.predict(img)
-            #if self.verbose:
+            # if self.verbose:
             #print('pred : ', pred)
-            pred = np.argmax(list(pred[0])) # [0, 1, 2, 3, 4]
+            pred = np.argmax(list(pred[0]))  # [0, 1, 2, 3, 4]
             #pred = list(pred[0])
         except Exception as e:
             # Don't print if the model is not relevant given the mode
@@ -177,24 +190,26 @@ class Ironcar():
         prediction: array of softmax
         """
 
-        
         #print("(SERVER) CURRENT_MODEL: ", self.current_model)
-        if self.started: 
+        if self.started:
 
             print("(SERVER) PREDICTION: ", self.pred_direction(prediction))
             coeffs = [0.45, 0.7, 1., 0.7, 0.45]
             speed_mode_coef = coeffs[prediction]
             #print('speed_mode_coef: {}'.format(speed_mode_coef))
 
-            local_dir = -(-1 + 2 * float(prediction)/float(4)) # On inverse pour que les signeaux coïncide bien avec les directions des roues
+            # On inverse pour que les signeaux coïncide bien avec les directions des roues
+            local_dir = -(-1 + 2 * float(prediction)/float(4))
             local_gas = self.max_speed_rate * speed_mode_coef
 
-            gas_value = int(local_gas * (self.commands['drive_max'] - self.commands['drive']) + self.commands['drive'])
-            dir_value = int(local_dir * (self.commands['right'] - self.commands['left'])/2. + self.commands['straight'])
+            gas_value = int(
+                local_gas * (self.commands['drive_max'] - self.commands['drive']) + self.commands['drive'])
+            dir_value = int(
+                local_dir * (self.commands['right'] - self.commands['left'])/2. + self.commands['straight'])
             self.dir_on_value = dir_value
             self.gas_on_value = gas_value
             #print("(SERVER) self.started: True")
-            
+
             self.gas(gas_value)
             self.dir(dir_value)
 
@@ -205,8 +220,6 @@ class Ironcar():
             self.gas(gas_value)
             self.dir(dir_value)
 
- 
-    
     def training(self, img):
         """
         Enregistre les images du stream lorsque started = True.
@@ -222,7 +235,6 @@ class Ironcar():
         img_arr.save(image_name)
 
         self.n_img += 1
-    
 
     def on_gas(self, data):
         """Triggered when a value from the keyboard/gamepad is received for gas.
@@ -249,7 +261,6 @@ class Ironcar():
             new_value = int(
                 self.curr_gas * (self.commands['drive_max']-self.commands['drive']) + self.commands['drive'])
         self.gas(new_value)
-
 
     def on_dir(self, data):
         """Triggered when a value from the keyboard/gamepad is received for dir.
@@ -303,7 +314,7 @@ class Ironcar():
 
         try:
             # Only import tensorflow if needed (it's heavy)
-            global get_default_graph # Qu'est-ce que c'est que global?
+            global get_default_graph  # Qu'est-ce que c'est que global?
             if get_default_graph is None:
                 try:
                     import tensorflow
@@ -323,18 +334,21 @@ class Ironcar():
             if self.verbose:
                 print('Selected model: ', model_name)
 
-            self.model = load_model(model_name, custom_objects=ak.CUSTOM_OBJECTS)  
+            self.model = load_model(
+                model_name, custom_objects=ak.CUSTOM_OBJECTS)
             self.current_model = model_name
             self.model_loaded = True
             self.switch_mode(self.mode)
 
-            data = {'type': 'success', 'msg': 'The model {} has been successfully loaded'.format(self.current_model)}
+            data = {'type': 'success', 'msg': 'The model {} has been successfully loaded'.format(
+                self.current_model)}
             print(data)
             print("(SERVER) CURRENT_MODEL: ", self.current_model)
 
             if self.verbose:
-                print('The model {} has been successfully loaded'.format(self.current_model))
-            
+                print('The model {} has been successfully loaded'.format(
+                    self.current_model))
+
         except Exception as e:
             data = {'type': 'danger', 'msg': 'Error while loading model {}. Got error {}'.format(
                 model_name, e)}

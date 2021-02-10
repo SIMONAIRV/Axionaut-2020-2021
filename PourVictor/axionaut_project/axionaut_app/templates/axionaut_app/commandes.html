@@ -73,13 +73,30 @@
     </header>
 
 <br>
-    <div class="text-center">
-        <div>
-            <div role="group" aria-label="First group">
-                <button id="start_stop_button" type="submit"  data-mode="down" onclick="location.href='{% url 'start_stop' %}'">Start/Stop</button> 
-            </div>
+<div class="text-center">
+    <div>
+        <div role="group" aria-label="First group">
+            <button id="start_stop_button"  onclick="location.href='{% url 'start_stop' %}'">Start</button> 
         </div>
+
+        <script >
+                var mycar = '{{car|escapejs }}' //getting context but in this js script
+                var jsonCar = JSON.parse(mycar); //converting because mycar is encoded
+
+                if(jsonCar.started==true){
+                    document.getElementById('start_stop_button').style.background = "red";
+                    document.getElementById('start_stop_button').innerHTML = "Stop";
+
+                }
+                else{
+                    document.getElementById('start_stop_button').style.background = "#00FF33";
+                    document.getElementById('start_stop_button').innerHTML = "Start";
+                }                    
+        
+             
+        </script> 
     </div>
+</div>
 <br />
     </div>
 
@@ -108,6 +125,15 @@
             <div>
                 <button id='down' type="submit" class="btn btn-outline-primary" data-mode="down"
                 onclick="location.href='{% url 'axionaut_app:gas_backward' %}'">⬇</button>
+            </div>
+            <div class="text-right"> 
+                            <br/>
+                            <p>Folder to save in :   </p>
+                                <form method = "GET"> 
+                                    <div id='form'> 
+                                        {{ car.folderForm }} 
+                                        <input type = "submit" value = "Submit"> </div>
+                                </form> 
             </div>
             </div>
 

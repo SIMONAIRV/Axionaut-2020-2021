@@ -73,38 +73,43 @@
     </header>
 
 <br>
-<div class="text-center">
-    <div>
-        <div role="group" aria-label="First group">
-            <button id="start_stop_button"  onclick="location.href='{% url 'start_stop' %}'">Start</button> 
+    <div class="text-center">
+        <div>
+            <div role="group" aria-label="First group">
+                <button id="start_stop_button"  onclick="location.href='{% url 'start_stop' %}'">Start</button> 
+            </div>
+
+            <script >
+                    var mycar = '{{car|escapejs}}' //getting context but in this js script
+                    var jsonCar = JSON.parse(mycar); //converting because mycar is encoded
+
+                    if(jsonCar.started==true){
+                        document.getElementById('start_stop_button').style.background = "red";
+                        document.getElementById('start_stop_button').innerHTML = "Stop";
+
+                    }
+                    else{
+                        document.getElementById('start_stop_button').style.background = "#00FF33";
+                        document.getElementById('start_stop_button').innerHTML = "Start";
+                    }                    
+            </script> 
         </div>
-
-        <script >
-                var mycar = '{{car|escapejs }}' //getting context but in this js script
-                var jsonCar = JSON.parse(mycar); //converting because mycar is encoded
-
-                if(jsonCar.started==true){
-                    document.getElementById('start_stop_button').style.background = "red";
-                    document.getElementById('start_stop_button').innerHTML = "Stop";
-
-                }
-                else{
-                    document.getElementById('start_stop_button').style.background = "#00FF33";
-                    document.getElementById('start_stop_button').innerHTML = "Start";
-                }                    
-        
-             
-        </script> 
     </div>
-</div>
-<br />
+<br/>
     </div>
-
         <div id="control">
            <!-- Stream/Picture -->
+            <div class = "container_column">
+                <img id="stream" src="{% url 'axionaut_app:video_training' %}">
+                <button id='record'>Record</button>
+                <div class="checkbox-example">
+                    <input type="checkbox" value="1" id="checkboxOneInput"/>
+                    <label for="checkboxOneInput"></label>
+                </div>
             <div>
-                <img src="{% url 'axionaut_app:video_training' %}">
-            </div>
+        </div>    
+    </div>
+            
 
             <div class="text-right"> 
                 <h1>Commandes</h1>
@@ -172,7 +177,6 @@
         </div>
     </div>
 <br />
-
 
 </body>
 

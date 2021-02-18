@@ -65,10 +65,7 @@ def commandes(request):
     if request.GET:
         folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
         temp = request.GET['folders']
-        print('XXXXXXXXXXXXXXXXXXX')
-
         print(temp)
-
         folder = folders[int(temp)-1]
         print(folder)
         car.save_image(folder)
@@ -138,13 +135,23 @@ def menu(request):
 def dir_neutral(request):
     car.direction = 3
     car.on_dir(0)
+
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
@@ -152,13 +159,22 @@ def dir_neutral(request):
 def dir_left(request):
     car.direction = 2
     car.on_dir(-1)
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
@@ -166,57 +182,94 @@ def dir_left(request):
 def dir_right(request):
     car.direction = 4
     car.on_dir(1)
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_neutral(request):
     car.on_gas(0)
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_forward(request):
     car.on_gas(1)
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def gas_backward(request):
     car.on_gas(-1)
+    form = folderForm()
+
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
         "gas": car.curr_gas,
         "dir": car.curr_dir,
-        "mode": car.mode
-
+        "mode": car.mode,
+        "status": car.status,
+        "folderForm": form,
     }
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
 def start_stop(request):
+    form = folderForm()
 
     if car.started == False:
         started = True
@@ -230,16 +283,21 @@ def start_stop(request):
     # Stop the gas before switching mode and reset wheel angle (safe)
     car.gas(car.commands['neutral'])  # pwm setup DECOMMENTER
     car.dir(car.commands['straight'])  # pwm setup DECOMMENTER
+    if request.GET:
+        folders = ['Hard Left', 'Left', 'Straight', 'Right', 'Hard Right']
+        temp = request.GET['folders']
+        folder = folders[int(temp)-1]
+        car.save_image(folder)
+
     myCar = {
         "speed_mode": car.speed_mode,
         "model": car.current_model,
-        "gas": car.gas_on_value,
-        "dir": car.dir_on_value,
+        "gas": car.curr_gas,
+        "dir": car.curr_dir,
         "mode": car.mode,
-        "status": car.status
-
+        "status": car.status,
+        "folderForm": form,
     }
-
     return render(request, 'axionaut_app/commandes.html', {"car": myCar})
 
 
